@@ -1,0 +1,132 @@
+[
+  {
+    "path": "sprites/game/Backgrounds",
+    "files": [
+      {
+        "type": "image",
+        "key": "backgroundBlack",
+        "url": "black.png"
+      },
+      {
+        "type": "image",
+        "key": "backgroundBlue",
+        "url": "blue.png"
+      },
+      {
+        "type": "image",
+        "key": "backgroundDarkPurple",
+        "url": "darkPurple.png"
+      },
+      {
+        "type": "image",
+        "key": "backgroundPurple",
+        "url": "purple.png"
+      }
+    ]
+  },
+  {
+    "path": "sprites/game",
+    "files": [
+      {
+        "type": "image",
+        "key": "playerShip1_blue",
+        "url": "playerShip1_blue.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip1_green",
+        "url": "playerShip1_green.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip1_orange",
+        "url": "playerShip1_orange.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip1_red",
+        "url": "playerShip1_red.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip2_blue",
+        "url": "playerShip2_blue.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip2_green",
+        "url": "playerShip2_green.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip2_orange",
+        "url": "playerShip2_orange.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip2_red",
+        "url": "playerShip2_red.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip3_green",
+        "url": "playerShip3_green.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip3_orange",
+        "url": "playerShip3_orange.png"
+      },
+      {
+        "type": "image",
+        "key": "playerShip3_red",
+        "url": "playerShip3_red.png"
+      }
+    ]
+  },
+  {
+    "path": "sprites/game/Lasers",
+    "files": [
+      {
+        "type": "image",
+        "key": "laserBlue01",
+        "url": "laserBlue01.png"
+      },
+      {
+        "type": "image",
+        "key": "laserBlue02",
+        "url": "laserBlue02.png"
+      },
+      {
+        "type": "image",
+        "key": "laserGreen01",
+        "url": "laserGreen01.png"
+      },
+      {
+        "type": "image",
+        "key": "laserGreen02",
+        "url": "laserGreen02.png"
+      },
+      {
+        "type": "image",
+        "key": "laserRed01",
+        "url": "laserRed01.png"
+      },
+      {
+        "type": "image",
+        "key": "laserRed02",
+        "url": "laserRed02.png"
+      }
+    ]
+  },
+  {
+    "path": "music",
+    "files": [
+      {
+        "type": "audio",
+        "key": "bgMusic",
+        "url": ["background_loop.mp3", "background_loop.ogg"]
+      }
+    ]
+  }
+]
