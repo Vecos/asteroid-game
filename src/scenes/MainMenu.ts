@@ -16,7 +16,7 @@ export default class MainMenu extends Phaser.Scene {
     const { width, height } = this.scale;
 
     // Title
-    this.add.text(width / 2, height / 3, 'JUST RANDOM ASTERPOID PIF PAF GAME', {
+    this.add.text(width / 2, height / 3, 'JUST RANDOM ASTEROID PIF PAF GAME', {
       fontSize: '42px',
       color: '#ffffff'
     }).setOrigin(0.5);

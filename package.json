@@ -1,9 +1,9 @@
 {
-  "name": "@bvs/spaceship",
+  "name": "@phaser/asteroidgame",
   "version": "1.0.0",
   "main": "src/entry/index.ts",
-  "author": "Nicolas Horvathk <nicolashorvath404@gmail.com>",
-  "license": "UNLICENSED",
+  "author": "Nicolas Horvath <nicolashorvath404@gmail.com>",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "build": "webpack --config webpack.config.js --mode=production",
