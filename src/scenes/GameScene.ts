@@ -23,7 +23,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload(): void {
-    AssetManager.preloadAssets(this);
+    //  AssetManager.preloadAssets(this);
   }
 
   create(): void {

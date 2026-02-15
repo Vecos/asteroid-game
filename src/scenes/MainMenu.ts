@@ -9,19 +9,33 @@ export default class MainMenu extends Phaser.Scene {
   }
 
   preload(): void {
-    AssetManager.preloadAssets(this);
+    this.load.on('progress', (value: number) => {
+  console.log('Loading:', Math.round(value * 100) + '%');
+  });
+  AssetManager.preloadAssets(this);  
   }
 
-  create(): void {
-
-    console.log('Font loaded:', document.fonts.check('12px kenvector_future'));
-
-
-    document.fonts.ready.then(() => {
-      this.createMenu();
-    });
-  }
-
+create(): void {
+  const { width, height } = this.scale;
+  
+  console.log('MainMenu create() started');
+  console.log('Screen size:', width, height);
+  
+  // Zobraz loading text
+  const loading = this.add.text(width / 2, height / 2, 'LOADING...', {
+    fontSize: '32px',
+    color: '#ffffff'
+  }).setOrigin(0.5);
+  
+  console.log('Loading text created:', loading);
+  console.log('Font check:', document.fonts.check('12px kenvector_future'));
+  
+  document.fonts.ready.then(() => {
+    console.log('Fonts ready!');
+    loading.destroy();
+    this.createMenu();
+  });
+}
   private createMenu(): void {
     const { width, height } = this.scale;
 
