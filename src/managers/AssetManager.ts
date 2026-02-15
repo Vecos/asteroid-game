@@ -66,5 +66,6 @@ export class AssetManager {
 
     // UI
     scene.load.image('strongLaserAbility', strongLaserAbility);
+    
   }
 }

@@ -1,10 +1,11 @@
-import '../../assets/html/style.css';
-import * as Phaser from 'phaser';
 
-import GameScene from '../scenes/GameScene';
+import '../../assets/html/style.css';
+import '../css/fonts.css';
+
+import * as Phaser from 'phaser';
 import MainMenu from '../scenes/MainMenu';
-//import MainMenu from '../scenes/MainMenu';
-//import Player from '../objects/Player';
+import GameScene from '../scenes/GameScene';
+
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,

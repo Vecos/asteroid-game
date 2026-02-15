@@ -1,0 +1,11 @@
+@font-face {
+    font-family: kenvector_future;
+    src: url('../../assets/fonts/kenvector_future_thin.ttf')format('truetype');
+
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'kenvector_future', Arial, sans-serif;
+}

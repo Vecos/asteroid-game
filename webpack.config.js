@@ -20,34 +20,60 @@ function rename (format) {
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production'
-
+  
   return {
     entry: './src/entry/index.ts',
     output: {
       filename: '[name].[contenthash].js',
-      publicPath: '/', // Cloudflare Pages používa root path
-        path: dist,
-        clean: true
+      publicPath: '/',
+      path: dist,
+      clean: true
     },
     devtool: isProduction ? false : 'inline-source-map',
+    devServer: {
+      static: {
+        directory: dist,
+      },
+      hot: true,
+      port: 8080,
+    },
     module: {
-      rules: [{
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
-      }, {
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader'
-        ]
-      }, {
-        test: /\.(png|jpg|xml)$/,
-        type: 'asset/resource'
-      }, {
-        test: /\.(mp3|ogg)$/,
-        type: 'asset/resource'
-      }]
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/
+        },
+        {
+          test: /\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader'
+          ]
+        },
+        {
+          test: /\.(png|jpg|jpeg|gif|svg|xml)$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'images/[name].[hash][ext]'
+          }
+        },
+        {
+          test: /\.(mp3|ogg|wav)$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'audio/[name].[hash][ext]'
+          }
+        },
+
+        {
+          test: /\.(ttf|woff|woff2|eot|otf)$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[name][ext]'
+          }
+        }
+      ]
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js']

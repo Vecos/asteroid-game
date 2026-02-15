@@ -16,6 +16,7 @@ export default class GameScene extends Phaser.Scene {
   private score: number = 0;
   private revives: number = GameConfig.INITIAL_REVIVES;
   private isGameOver: boolean = false;
+  private isPlayerInvicible: boolean = false;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -92,9 +93,9 @@ export default class GameScene extends Phaser.Scene {
       this.player.getSprite(),
       this.asteroidManager.getAsteroids(),
       this.onPlayerHit,
-      undefined,
+      this.playerInvicible.bind(this),
       this
-    );
+);
 
     // Laser vs Asteroids
     this.physics.add.overlap(
@@ -152,13 +153,25 @@ export default class GameScene extends Phaser.Scene {
       this.endGame();
     } else {
       this.player.setPosition(width / 2, height - 120);
+      this.isPlayerInvicible = true;
+      this.tweens.add({
+        targets: this.player.getSprite(),
+        alpha: 0.3,
+        duration: 100,
+        yoyo: true,
+        repeat: 5
+      })
+      this.time.delayedCall(300, () => (this.isPlayerInvicible = false));
     }
 
     // Destroy the asteroid that hit the player
     const asteroidSprite = asteroid as Phaser.Physics.Arcade.Sprite;
     this.asteroidManager.damageAsteroid(asteroidSprite, 999);
   }
-
+ private playerInvicible(): boolean
+ {   
+ return !this.isPlayerInvicible; 
+ }
   private endGame(): void {
     this.isGameOver = true;
     this.physics.pause();

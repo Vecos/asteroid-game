@@ -23,26 +23,26 @@ export class UIManager {
 
     // Score display
     this.scoreText = this.scene.add.text(width / 2, 20, 'Score: 0', {
-      fontSize: '24px', color: '#ffffff', fontFamily: 'Arial, sans-serif'
+      fontSize: '24px', color: '#ffffff', fontFamily: 'kenvector_future'
     }).setOrigin(1, 0).setDepth(1000);
 
     // Lives display
     this.livesText = this.scene.add.text(width - 100, 20, 'Lives: 3', {
-      fontSize: '20px', color: '#ffffff', fontFamily: 'Arial, sans-serif'
+      fontSize: '20px', color: '#ffffff',fontFamily: 'kenvector_future'
     }).setOrigin(0, 0).setDepth(1000);
 
     // Game over UI
     this.gameOverText = this.scene.add.text(width / 2, height / 2 - 50, 'Game Over', {
-      fontSize: '48px', color: '#ff6666', fontFamily: 'Arial, sans-serif',
+      fontSize: '48px', color: '#ff6666',fontFamily: 'kenvector_future',
       stroke: '#000000', strokeThickness: 4
     }).setOrigin(0.5).setVisible(false);
 
     this.finalScoreText = this.scene.add.text(width / 2, height / 2, 'Final Score: 0', {
-      fontSize: '24px', color: '#ffffff', fontFamily: 'Arial, sans-serif'
+      fontSize: '24px', color: '#ffffff',fontFamily: 'kenvector_future'
     }).setOrigin(0.5).setVisible(false);
 
     this.restartButton = this.scene.add.text(width / 2, height / 2 + 60, 'Restart', {
-      fontSize: '32px', color: '#00ff00', fontFamily: 'Arial, sans-serif'
+      fontSize: '32px', color: '#00ff00',fontFamily: 'kenvector_future'
     })
       .setOrigin(0.5)
       .setInteractive()
