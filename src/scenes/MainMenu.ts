@@ -73,7 +73,7 @@ export default class MainMenu extends Phaser.Scene {
 
     // Controls
     this.add.text(width / 2, height - 50, 'Arrows = Move | Space = Shoot | Alt = Strong Laser', {
-      fontSize: '14px',
+      fontSize: '20px',
       color: '#ffffffff'
     }).setOrigin(0.5);
   }
