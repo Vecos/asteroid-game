@@ -1,0 +1,35 @@
+name: Build Check
+
+on:
+  push:
+    branches: [ testdev ]
+  pull_request:
+    branches: [ testdev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'yarn'
+      
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Build project
+        run: yarn build
+      
+      - name: Check build output
+        run: |
+          echo "Build completed successfully!"
+          echo "Bundle size:"
+          du -sh dist/
+          echo "Files created:"
+	  ls -lh dist/
