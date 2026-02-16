@@ -32,4 +32,4 @@ jobs:
           echo "Bundle size:"
           du -sh dist/
           echo "Files created:"
-	  ls -lh dist/
+		  ls -lh dist/
