@@ -16,43 +16,66 @@ export default class GameScene extends Phaser.Scene {
   private score: number = 0;
   private revives: number = GameConfig.INITIAL_REVIVES;
   private isGameOver: boolean = false;
-  private isPlayerInvicible: boolean = false;
-
+  private isPlayerInvincible: boolean = false;
+  private isReady: boolean = false; 
   constructor() {
     super({ key: 'GameScene' });
   }
 
   preload(): void {
-    //  AssetManager.preloadAssets(this);
+    AssetManager.preloadAssets(this);
   }
 
   create(): void {
+    // Zobraz loading indicator
     const { width, height } = this.scale;
+    const loadingText = this.add.text(width / 2, height / 2, 'Loading...', {
+      fontSize: '32px',
+      color: '#ffffff'
+    }).setOrigin(0.5);
 
-    // Setup background
-    this.createBackgrounds();
+    // Postupné vytváranie objektov
+    this.time.delayedCall(50, () => {
+      this.createBackgrounds();
+      loadingText.setText('Creating player...');
+    });
 
-    // Initialize game objects
-    this.player = new Player(this, width / 2, height - 120);
-    this.weaponManager = new WeaponManager(this, this.player);
-    this.asteroidManager = new AsteroidManager(this);
-    this.uiManager = new UIManager(this, () => this.restartGame());
+    this.time.delayedCall(100, () => {
+      this.player = new Player(this, width / 2, height - 120);
+      loadingText.setText('Loading weapons...');
+    });
 
-    // Initialize UI
-    this.uiManager.updateScore(this.score);
-    this.uiManager.updateLives(this.revives);
+    this.time.delayedCall(150, () => {
+      this.weaponManager = new WeaponManager(this, this.player);
+      loadingText.setText('Spawning asteroids...');
+    });
 
-    // Setup audio
-    this.bgMusic = this.sound.add('bgMusic', { loop: true, volume: 0.5 });
-    this.bgMusic.play();
+    this.time.delayedCall(200, () => {
+      this.asteroidManager = new AsteroidManager(this);
+      loadingText.setText('Creating UI...');
+    });
 
-    // Setup collisions
-    this.setupCollisions();
+    this.time.delayedCall(250, () => {
+      this.uiManager = new UIManager(this, () => this.restartGame());
+      this.uiManager.updateScore(this.score);
+      this.uiManager.updateLives(this.revives);
+      loadingText.setText('Loading audio...');
+    });
+
+    this.time.delayedCall(300, () => {
+      // Audio načítaj asynchrónne
+      this.bgMusic = this.sound.add('bgMusic', { loop: true, volume: 0.5 });
+      this.bgMusic.play();
+      
+      loadingText.destroy();
+      this.setupCollisions();
+      this.isReady = true;
+    });
   }
 
   private createBackgrounds(): void {
     const backgroundKeys = ['backgroundBlack', 'backgroundBlue', 'backgroundPurple', 'backgroundDarkPurple'];
-
+    
     backgroundKeys.forEach((key, index) => {
       const bg = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, key)
         .setOrigin(0, 0);
@@ -69,7 +92,6 @@ export default class GameScene extends Phaser.Scene {
         const previousIndex = currentBackgroundIndex;
         currentBackgroundIndex = (currentBackgroundIndex + 1) % this.backgrounds.length;
 
-        // Fade out old, fade in new
         this.tweens.add({
           targets: this.backgrounds[previousIndex],
           alpha: 0,
@@ -93,10 +115,10 @@ export default class GameScene extends Phaser.Scene {
       this.player.getSprite(),
       this.asteroidManager.getAsteroids(),
       this.onPlayerHit,
-      this.playerInvicible.bind(this),
+      () => this.canPlayerBeHit(),
       this
-);
-
+    );
+    
     // Laser vs Asteroids
     this.physics.add.overlap(
       this.weaponManager.getLasers(),
@@ -107,8 +129,12 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
+  private canPlayerBeHit(): boolean {
+    return !this.isPlayerInvincible;
+  }
+
   update(time: number): void {
-    if (!this.isGameOver) {
+    if (!this.isGameOver && this.isReady) {
       this.player.update();
       this.weaponManager.update(time);
       this.asteroidManager.update();
@@ -123,18 +149,15 @@ export default class GameScene extends Phaser.Scene {
     const laser = laserGO as Phaser.Physics.Arcade.Sprite;
     const asteroid = asteroidGO as Phaser.Physics.Arcade.Sprite;
 
-    // Determine damage
     const isStrong = laser.getData('isStrong') === true || laser.texture.key === 'strongLaser';
     const damage = isStrong ? 2 : 1;
 
-    // Damage asteroid
     const wasDestroyed = this.asteroidManager.damageAsteroid(asteroid, damage);
 
     if (wasDestroyed) {
       this.addScore(this.getAsteroidPoints(asteroid.texture.key));
     }
 
-    // Regular lasers are destroyed on hit, strong lasers penetrate
     if (!isStrong) {
       laser.destroy();
     }
@@ -145,33 +168,39 @@ export default class GameScene extends Phaser.Scene {
     asteroid: Phaser.Types.Physics.Arcade.GameObjectWithBody
   ): void {
     const { width, height } = this.scale;
-
+    
     this.revives--;
     this.uiManager.updateLives(this.revives);
-
+    
     if (this.revives <= 0) {
       this.endGame();
     } else {
       this.player.setPosition(width / 2, height - 120);
-      this.isPlayerInvicible = true;
+      
+      // Invincibility frames
+      this.isPlayerInvincible = true;
+      
+      // Blinking effect
       this.tweens.add({
         targets: this.player.getSprite(),
         alpha: 0.3,
         duration: 100,
         yoyo: true,
-        repeat: 5
-      })
-      this.time.delayedCall(300, () => (this.isPlayerInvicible = false));
+        repeat: 2,
+        onComplete: () => {
+          this.player.getSprite().alpha = 1;
+        }
+      });
+      
+      this.time.delayedCall(300, () => {
+        this.isPlayerInvincible = false;
+      });
     }
-
-    // Destroy the asteroid that hit the player
+    
     const asteroidSprite = asteroid as Phaser.Physics.Arcade.Sprite;
     this.asteroidManager.damageAsteroid(asteroidSprite, 999);
   }
- private playerInvicible(): boolean
- {   
- return !this.isPlayerInvicible; 
- }
+
   private endGame(): void {
     this.isGameOver = true;
     this.physics.pause();
@@ -181,29 +210,25 @@ export default class GameScene extends Phaser.Scene {
 
   private restartGame(): void {
     const { width, height } = this.scale;
-
-    // Reset game state
+    
     this.revives = GameConfig.INITIAL_REVIVES;
     this.isGameOver = false;
     this.score = 0;
-
-    // Reset player
+    
     this.player.enableBody(true, width / 2, height - 120, true, true);
     this.player.setVisible(true);
-
-    // Reset UI and physics
+    
     this.uiManager.hideGameOver();
     this.physics.resume();
     this.asteroidManager.clear();
-
-    // Update UI
+    
     this.uiManager.updateScore(this.score);
     this.uiManager.updateLives(this.revives);
   }
 
   private getAsteroidPoints(asteroidKey: string): number {
     if (asteroidKey.includes('Big')) return 100;
-    if (asteroidKey.includes('Med')) return 200;
+    if (asteroidKey.includes('Med')) return 200; 
     if (asteroidKey.includes('Small')) return 300;
     if (asteroidKey.includes('Tiny')) return 400;
     return 50;
